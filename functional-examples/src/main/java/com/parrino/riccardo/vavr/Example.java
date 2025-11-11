@@ -1,13 +1,67 @@
 package com.parrino.riccardo.vavr;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import io.vavr.Function2;
 import io.vavr.Function3;
 import io.vavr.control.Option;
 
 public class Example {
     public static void main(String[] args) {
-        LiftingExample.example();
+        System.out.println(OptionalJavaClassExample.exampleWithOptional2(10));
     }
+}
+
+class OptionalJavaClassExample {
+
+    public static void example() {
+        Optional<String> maybeFoo = Optional.ofNullable("temp");
+        maybeFoo.ifPresent(value -> System.out.println(value));
+        System.out.println(maybeFoo.orElse("notemp"));
+        System.out.println(maybeFoo.orElseGet(() -> "1"));
+        Optional<String> upper = Optional.of("java").map(String::toUpperCase);
+    }
+
+    public static Integer exampleWithoutOptional(Integer integer) {
+        if (integer != null) {
+            return integer + 3;
+        }
+        return null;
+    }
+
+    public static Integer exampleWithOptional(Integer integer) {
+        return Optional.ofNullable(integer)
+                .map((i) -> i + 3)
+                .orElse(null);
+    }
+
+    public static Optional<Integer> exampleWithOptional2(Integer integer) {
+        List<Integer> temps = new ArrayList<>();
+        temps.add(1);
+        temps.add(2);
+        temps.add(3);
+        temps.add(4);
+        return Optional.ofNullable(
+                temps.indexOf(integer) < 0 ? null : temps.indexOf(integer))
+                .map((s) -> 2 * s);
+    }
+
+    public static Integer exampleWithOptional3(Integer integer) {
+        List<Integer> temps = new ArrayList<>();
+        temps.add(1);
+        temps.add(2);
+        temps.add(3);
+        temps.add(4);
+        return List.of((temps.indexOf(integer) < 0 ? null : temps.indexOf(integer)))
+                .stream()
+                .map((s) -> 2 * s)
+                .collect(Collectors.toList())
+                .get(0);
+    }
+
 }
 
 class FunctionNExample {
